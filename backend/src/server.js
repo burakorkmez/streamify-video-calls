@@ -28,7 +28,6 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
-
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
@@ -37,7 +36,18 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Export app for serverless adapters (Vercel) and local use.
+// When running on Vercel (serverless), Vercel sets the VERCEL env var.
+// Avoid calling app.listen in serverless environments.
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port http://localhost:${PORT}`);
+    connectDB();
+  });
+} else {
+  // In serverless environments, ensure DB connects when the module is loaded.
+  // connectDB is async; start it but don't block module export.
   connectDB();
-});
+}
+
+export default app;

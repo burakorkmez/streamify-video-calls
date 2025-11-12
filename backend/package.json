@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.0",
+    "serverless-http": "^3.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "stream-chat": "^8.60.0"
